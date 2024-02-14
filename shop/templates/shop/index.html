@@ -1,0 +1,36 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block body %}
+  <link rel="stylesheet" href="{% static 'shop/style.css' %}" />
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <form method="get" class="card card-sm">
+          {% csrf_token %}
+          <div class="card-body no-gutters align-items-center row">
+            <div class="col">
+              <input class="form-control" type="search" name="item_name" id="" placeholder="search for item" />
+            </div>
+            <div class="col-auto">
+              <button class="btn btn-success">Search</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="row">
+      {% for product in products %}
+        <div class="col-md-3">
+          <div class="card">
+            <img src="{{ product.image }}" alt="" class="card-img-top" />
+            <div class="card-body">
+              <div class="card-title">{{ product.title }}</div>
+              <div class="card-text">${{ product.price }}</div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

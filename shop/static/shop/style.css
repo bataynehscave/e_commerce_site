@@ -1,0 +1,15 @@
+body{background-color: #f7f7f7;}
+
+.card-title{
+    font-weight: bold;
+}
+
+.card-text{
+    color: green;
+}
+
+.card-img-top{
+    height: 300px;
+    width: 300px;
+    
+}
