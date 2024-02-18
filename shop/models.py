@@ -12,3 +12,14 @@ class Product(models.Model):
 
     def __str__(self) -> str :
         return self.title
+    
+class Order(models.Model):
+
+    items = models.CharField(max_length = 3000)
+    name = models.CharField(max_length = 200)
+    email = models.EmailField()
+    location = models.CharField(max_length = 300)
+    total = models.FloatField()
+
+    def __str__(self) -> str:
+        return self.name + ' order'

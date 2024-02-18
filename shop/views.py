@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.paginator import Paginator
 from shop.models import Product
-
+from .forms import OrderForm
 # Create your views here.
 def index(request):
     products = Product.objects.all()
@@ -17,3 +17,17 @@ def index(request):
     products = paginator.get_page(page)
 
     return render(request, 'shop/index.html', {"products": products})
+
+def details(request, id):
+    product = Product.objects.get(pk=id)
+    return render(request, 'shop/details.html', {'product':product})
+
+
+def checkout(request):
+    orderform = OrderForm()
+    if request.method == 'POST':
+        orderform = OrderForm(request.POST , initial={'total': request.POST.get("total"), 'items': request.POST.get("items")})
+        if orderform.is_valid():
+            orderform.save()
+        return redirect( 'shop:index')
+    return render(request, 'shop/checkout.html', {'form': orderform})

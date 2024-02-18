@@ -1,0 +1,63 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block body %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <ol class="list-group list-group-numbered" id="cart-items"></ol>
+      </div>
+      <div class="col-md-4">
+        <form method="POST" class="form">
+          {% csrf_token %}
+          <div class="form-group">
+            <div class="mb-3">
+              <label for="id_name" class="col-form-label">Name</label>
+              {{ form.name }}
+            </div>
+
+            <div class="mb-3">
+              <label for="id_email" class="col-form-label">Email</label>
+              {{ form.email }}
+            </div>
+
+            <div class="mb-3">
+              <label for="id_location" class="col-form-label">Location</label>
+              {{ form.location }}
+            </div>
+          </div>
+          <input type="hidden" name="total" id="total" />
+          <input type="hidden" name="items" id="items" />
+          <input type="submit" value="place order" class="btn btn-success" id="submit" />
+        </form>
+      </div>
+    </div>
+  </div>
+  <script></script>
+  <script>
+    function displayList() {
+      let cart = JSON.parse(localStorage.getItem('cart'))
+      let cartItems = document.getElementById('cart-items')
+      let total = 0
+      const parser = new DOMParser()
+      for (prod in cart) {
+        let eleText = `<li class="list-group-item d-flex justify-content-between align-items-start">
+                                                                                            <div class="ms-2 me-auto"><div class="fw-bold">${cart[prod]['name']}</div>quantity: ${cart[prod]['qty']}</div>
+                                                                                            <span class="badge bg-primary rounded-pill">${cart[prod]['price'] * cart[prod]['qty']}</span></li>`
+        total += cart[prod]['price'] * cart[prod]['qty']
+        const ele = parser.parseFromString(eleText, 'text/html')
+    
+        cartItems.append(ele.body.firstChild)
+      }
+      const tot = parser.parseFromString(`<h6> Total:  ${total} </h6>`, 'text/html')
+      cartItems.append(tot.body.firstChild)
+      let itemsInput = document.getElementById('items')
+      let totInput = document.getElementById('total')
+      itemsInput.value = JSON.stringify(cart)
+      totInput.value = total
+    }
+    displayList()
+    document.getElementById('submit').addEventListener('click', () => {
+      localStorage.clear()
+    })
+  </script>
+{% endblock %}
